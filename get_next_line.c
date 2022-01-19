@@ -6,7 +6,7 @@
 /*   By: vferraro <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 12:23:27 by vferraro          #+#    #+#             */
-/*   Updated: 2022/01/18 11:47:42 by vferraro         ###   ########.fr       */
+/*   Updated: 2022/01/19 11:20:26 by vferraro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@ void	get_next(int fd, char *buff, char **fd_line)
 	int		read_line;
 	char	*stock;
 
-	read_line = read(fd, buff, BUFFER_SIZE);
-	while (read_line > 0)
+	while (!ft_strchr(*fd_line, '\n'))
 	{
+		read_line = read(fd, buff, BUFFER_SIZE);
 		buff[read_line] = '\0';
+		if (read_line == 0)
+		{
+			free(buff);
+			return ;
+		}
 		if (!*fd_line)
 			*fd_line = ft_substr(buff, 0, read_line);
 		else
@@ -29,9 +34,6 @@ void	get_next(int fd, char *buff, char **fd_line)
 			*fd_line = ft_strjoin(*fd_line, buff);
 			free(stock);
 		}
-		if (ft_strchr(buff, '\n'))
-			break ;
-		read_line = read(fd, buff, BUFFER_SIZE);
 	}
 	free(buff);
 }
@@ -70,12 +72,16 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	static char	*fd_line;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (fd < 0 || !buffer || BUFFER_SIZE <= 0)
-	{
-		free(buffer);
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
+	if (!fd_line)
+	{
+		fd_line = malloc(sizeof(char) * 1);
+		fd_line[0] = '\0';
 	}
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (NULL);
 	get_next(fd, buffer, &fd_line);
 	return (line(&fd_line));
 }
