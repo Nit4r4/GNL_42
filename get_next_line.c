@@ -6,7 +6,7 @@
 /*   By: vferraro <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 12:23:27 by vferraro          #+#    #+#             */
-/*   Updated: 2022/01/19 11:20:26 by vferraro         ###   ########.fr       */
+/*   Updated: 2022/01/25 13:49:45 by vferraro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ void	get_next(int fd, char *buff, char **fd_line)
 	{
 		read_line = read(fd, buff, BUFFER_SIZE);
 		buff[read_line] = '\0';
-		if (read_line == 0)
+		if (!*fd_line)
 		{
+			*fd_line = ft_substr(buff, 0, read_line);
+		}
+		else if (read_line == 0)
+		{	
 			free(buff);
 			return ;
 		}
-		if (!*fd_line)
-			*fd_line = ft_substr(buff, 0, read_line);
 		else
 		{
 			stock = *fd_line;
@@ -54,7 +56,7 @@ char	*line(char **fd_line)
 		*fd_line = 0;
 		if (ret[0] == '\0')
 			free (ret);
-		if (ret[0] != '\0')
+		else if (ret[0] != '\0')
 			return (ret);
 		return (NULL);
 	}

@@ -6,7 +6,7 @@
 /*   By: vferraro <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 12:52:13 by vferraro          #+#    #+#             */
-/*   Updated: 2022/01/19 11:03:38 by vferraro         ###   ########.fr       */
+/*   Updated: 2022/01/25 13:49:03 by vferraro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ char	*ft_substr(const char *str, unsigned int start, size_t len)
 	size_t	count;
 
 	dst = malloc(len + 1);
+	if (!dst)
+	{
+		return (0);
+	}
 	if (dst == 0)
 		return (0);
 	src = (char *)str + start;
